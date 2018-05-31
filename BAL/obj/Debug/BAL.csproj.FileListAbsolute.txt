@@ -1,0 +1,5 @@
+D:\Smester 6\EAD\Ass8_GoogleDrive\BAL\bin\Debug\BAL.dll
+D:\Smester 6\EAD\Ass8_GoogleDrive\BAL\bin\Debug\BAL.pdb
+D:\Smester 6\EAD\Ass8_GoogleDrive\BAL\obj\Debug\BAL.csprojResolveAssemblyReference.cache
+D:\Smester 6\EAD\Ass8_GoogleDrive\BAL\obj\Debug\BAL.dll
+D:\Smester 6\EAD\Ass8_GoogleDrive\BAL\obj\Debug\BAL.pdb

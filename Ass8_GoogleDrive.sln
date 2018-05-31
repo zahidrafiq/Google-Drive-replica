@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ass8_GoogleDrive", "Ass8_GoogleDrive\Ass8_GoogleDrive.csproj", "{7378E1F5-DE92-44AF-86FE-FE7C7D52AEF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity", "Entity\Entity.csproj", "{48F3A256-9D4B-438C-B77D-7F9AFA0E41D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAO\DAL.csproj", "{36FDA124-AFCB-418E-9734-42E892214AB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BAL", "BAL\BAL.csproj", "{98D8F46D-2470-45B6-9151-D77D24A499C2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7378E1F5-DE92-44AF-86FE-FE7C7D52AEF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7378E1F5-DE92-44AF-86FE-FE7C7D52AEF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7378E1F5-DE92-44AF-86FE-FE7C7D52AEF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7378E1F5-DE92-44AF-86FE-FE7C7D52AEF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48F3A256-9D4B-438C-B77D-7F9AFA0E41D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48F3A256-9D4B-438C-B77D-7F9AFA0E41D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48F3A256-9D4B-438C-B77D-7F9AFA0E41D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48F3A256-9D4B-438C-B77D-7F9AFA0E41D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36FDA124-AFCB-418E-9734-42E892214AB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36FDA124-AFCB-418E-9734-42E892214AB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36FDA124-AFCB-418E-9734-42E892214AB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36FDA124-AFCB-418E-9734-42E892214AB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98D8F46D-2470-45B6-9151-D77D24A499C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98D8F46D-2470-45B6-9151-D77D24A499C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98D8F46D-2470-45B6-9151-D77D24A499C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98D8F46D-2470-45B6-9151-D77D24A499C2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

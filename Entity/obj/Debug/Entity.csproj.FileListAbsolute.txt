@@ -1,0 +1,5 @@
+D:\Smester 6\EAD\Ass8_GoogleDrive\Entity\bin\Debug\Entity.dll
+D:\Smester 6\EAD\Ass8_GoogleDrive\Entity\bin\Debug\Entity.pdb
+D:\Smester 6\EAD\Ass8_GoogleDrive\Entity\obj\Debug\Entity.csprojResolveAssemblyReference.cache
+D:\Smester 6\EAD\Ass8_GoogleDrive\Entity\obj\Debug\Entity.dll
+D:\Smester 6\EAD\Ass8_GoogleDrive\Entity\obj\Debug\Entity.pdb
