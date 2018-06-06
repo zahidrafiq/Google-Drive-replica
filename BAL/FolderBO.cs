@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace BAL
 {
-    class FolderBO
+    public static class FolderBO
     {
+        public static int save(String name,int uid)
+        {
+            return DAL.FolderDAO.save ( name, uid );
+        }
     }
 }

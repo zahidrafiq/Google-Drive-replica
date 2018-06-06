@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BAL
 {
-    class FileBO
+    public static class FileBO
     {
     }
 }

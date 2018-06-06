@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    class FileDAO
+    public static class FileDAO
     {
     }
 }
