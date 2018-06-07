@@ -12,5 +12,10 @@ namespace BAL
         {
             return DAL.FolderDAO.save ( name, uid );
         }
+
+        public static List<Entity.FolderDTO> getFoldersOfUser ( int uid )
+        {
+            return DAL.FolderDAO.getFoldersOfUser ( uid );
+        }
     }
 }

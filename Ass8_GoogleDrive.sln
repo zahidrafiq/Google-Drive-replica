@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "D:\Smester 6\EAD\Ass
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity", "D:\Smester 6\EAD\Assignment8\Ass8_GoogleDrive\Entity\Entity.csproj", "{48F3A256-9D4B-438C-B77D-7F9AFA0E41D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ass8_GoogleDrive", "D:\Smester 6\EAD\Assignment8\Ass8_GoogleDrive\Ass8_GoogleDrive\Ass8_GoogleDrive.csproj", "{7378E1F5-DE92-44AF-86FE-FE7C7D52AEF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ass8_GoogleDrive", "Ass8_GoogleDrive\Ass8_GoogleDrive.csproj", "{7378E1F5-DE92-44AF-86FE-FE7C7D52AEF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
