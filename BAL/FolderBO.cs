@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace BAL
 {
     public static class FolderBO
     {
-        public static int save(String name,int uid)
+        public static int save ( String name, int uid )
         {
             return DAL.FolderDAO.save ( name, uid );
         }
@@ -16,6 +17,11 @@ namespace BAL
         public static List<Entity.FolderDTO> getFoldersOfUser ( int uid )
         {
             return DAL.FolderDAO.getFoldersOfUser ( uid );
+        }
+
+        public static List<FolderDTO> getChildFolders ( int pid )
+        {
+            return DAL.FolderDAO.getChildFolders ( pid );
         }
     }
 }

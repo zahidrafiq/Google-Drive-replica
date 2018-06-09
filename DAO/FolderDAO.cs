@@ -38,7 +38,23 @@ namespace DAL
                 return list;
             }
         }
-
+        /////////////////////////////////////////////////////////////////////
+        public static List<FolderDTO> getChildFolders(int pid)
+        {
+            String query = String.Format(@"SELECT * FROM dbo.Folder WHERE ParentFolderId='{0}'", pid);
+            using (DBHelper helper = new DBHelper ())
+            { 
+                var reader=helper.ExecuteReader ( query );
+                List<FolderDTO> list = new List<FolderDTO> ();
+                while(reader.Read())
+                {
+                    var dto= FillDTO ( reader );
+                    if(dto!=null)
+                        list.Add ( dto );
+                }
+                return list;
+            }
+        }
         /////////////////////////////////////////////////////////////////////
         private static FolderDTO FillDTO ( SqlDataReader reader )
         {

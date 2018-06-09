@@ -7,9 +7,12 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace G_Drive_api.Controllers
 {
+    //[EnableCors( origins: "*", headers: "*", methods: "*" )]
+    [EnableCors ( origins: "*", headers: "*", methods: "*" )]
     public class FolderApiController : ApiController
     {   
         [HttpGet]
@@ -46,6 +49,14 @@ namespace G_Drive_api.Controllers
                 { }
             }
         }
+///////////////////////////////////////////////////////////////////////////////
+[HttpPost]
+         public List<FolderDTO> getChildFolders()
+        {
+            var a=HttpContext.Current.Request.Params.Get("id");
+            return BAL.FolderBO.getChildFolders (Convert.ToInt32( a ));
+        }
+
         //// GET api/<controller>
         //public IEnumerable<string> Get ()
         //{
