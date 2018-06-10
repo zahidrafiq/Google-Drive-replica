@@ -10,10 +10,10 @@ namespace DAL
 {
     public static class FolderDAO
     {
-        public static int save(String name,int uid)
+        public static int save(String name,int uid ,int Pfid)
         {
             String query = String.Format ( @"INSERT INTO dbo.Folder (Name,ParentFolderId,CreatedBy,CreatedOn,IsActive) 
-             VALUES('{0}','{1}','{2}','{3}',1);select @@IDENTITY", name,null,uid,DateTime.Now );
+             VALUES('{0}','{1}','{2}','{3}',1);select @@IDENTITY", name,Pfid,uid,DateTime.Now );
             
             using (DBHelper helper = new DBHelper ())
             {
@@ -24,7 +24,7 @@ namespace DAL
 
         public static List<Entity.FolderDTO> getFoldersOfUser(int uid)
         {
-            String query=String.Format("SELECT * FROM dbo.Folder Where CreatedBy={0}",uid);
+            String query=String.Format("SELECT * FROM dbo.Folder Where CreatedBy={0} AND IsActive='{1}' AND ParentFolderId='{2}'",uid,1,0);
             using (DBHelper helper = new DBHelper ())
             {
                  var reader=helper.ExecuteReader ( query );

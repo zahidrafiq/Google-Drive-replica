@@ -15,11 +15,16 @@ namespace G_Drive_api.Controllers
     [EnableCors ( origins: "*", headers: "*", methods: "*" )]
     public class FolderApiController : ApiController
     {   
-        [HttpGet]
-        public void saveFolder(String Name,int Uid)
+        [HttpPost]
+        public int saveFolder()
         {
-            var rv=BAL.FolderBO.save ( Name, Uid );   
+            var name = HttpContext.Current.Request.Params.Get ( "Name" );
+            var uid = HttpContext.Current.Request.Params.Get ( "Uid" );
+            var pfid = HttpContext.Current.Request.Params.Get ( "Pfid" );
+            var rv=BAL.FolderBO.save ( name,Convert.ToInt32(uid) ,Convert.ToInt32(pfid));
+            return rv;
         }
+        
 
         [HttpGet]
         public void saveFile () {
@@ -50,7 +55,7 @@ namespace G_Drive_api.Controllers
             }
         }
 ///////////////////////////////////////////////////////////////////////////////
-[HttpPost]
+         [HttpPost]
          public List<FolderDTO> getChildFolders()
         {
             var a=HttpContext.Current.Request.Params.Get("id");

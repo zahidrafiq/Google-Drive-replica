@@ -9,9 +9,9 @@ namespace BAL
 {
     public static class FolderBO
     {
-        public static int save ( String name, int uid )
+        public static int save ( String name, int uid,int Pfid )
         {
-            return DAL.FolderDAO.save ( name, uid );
+            return DAL.FolderDAO.save ( name, uid ,Pfid);
         }
 
         public static List<Entity.FolderDTO> getFoldersOfUser ( int uid )
