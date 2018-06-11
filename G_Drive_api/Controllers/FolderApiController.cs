@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
-
+//using System.Windows.Shell;
 namespace G_Drive_api.Controllers
 {
     //[EnableCors( origins: "*", headers: "*", methods: "*" )]
@@ -26,33 +26,50 @@ namespace G_Drive_api.Controllers
         }
         
 
-        [HttpGet]
+        [HttpPost]
         public void saveFile () {
-            if(HttpContext.Current.Request.Files.Count > 0)
+            if (HttpContext.Current.Request.Files.AllKeys.Any ())
             {
-                try
+                // Get the uploaded image from the Files collection
+                var httpPostedFile = HttpContext.Current.Request.Files["f"];
+
+                if (httpPostedFile != null)
                 {
-                    foreach (var fileName in HttpContext.Current.Request.Files.AllKeys)
-                    {
-                        HttpPostedFile file = HttpContext.Current.Request.Files[fileName];
-                        if (file != null)
-                        {
-                            FileDTO dto = new FileDTO ();
-                            dto.Name = Guid.NewGuid ().ToString ();//Unique file name.
-                            dto.UploadedOn = DateTime.Now;
-                            //dto.CreatedBy = Uid;
-                            dto.FileExt = Path.GetExtension ( file.FileName );
-                            //dto.ParentFolderId = ParentId;
-                            dto.size = 1024;
-                            var rootPath = HttpContext.Current.Server.MapPath ( "~/UploadedFiles" );
-                            var fileSavePAth = System.IO.Path.Combine (  rootPath,dto.Name + dto.FileExt );
-                            file.SaveAs ( fileSavePAth );
-                        }
-                    }
+                    // Validate the uploaded image(optional)
+
+                    // Get the complete file path
+                    var fileSavePath = Path.Combine ( HttpContext.Current.Server.MapPath( "~/UploadedFiles" ), httpPostedFile.FileName );
+
+                    // Save the uploaded file to "UploadedFiles" folder
+                    httpPostedFile.SaveAs ( fileSavePath );
                 }
-                catch(Exception exp)
-                { }
             }
+            //var a=HttpContext.Current.Request.Params.Get ( "f" );
+            //if(HttpContext.Current.Request.Files.Count > 0)
+            //{
+            //    try
+            //    {
+            //        foreach (var fileName in HttpContext.Current.Request.Files.AllKeys)
+            //        {
+            //            HttpPostedFile file = HttpContext.Current.Request.Files[fileName];
+            //            if (file != null)
+            //            {
+            //                FileDTO dto = new FileDTO ();
+            //                dto.Name = Guid.NewGuid ().ToString ();//Unique file name.
+            //                dto.UploadedOn = DateTime.Now;
+            //                //dto.CreatedBy = Uid;
+            //                dto.FileExt = Path.GetExtension ( file.FileName );
+            //                //dto.ParentFolderId = ParentId;
+            //                dto.size = 1024;
+            //                var rootPath = HttpContext.Current.Server.MapPath ( "~/UploadedFiles" );
+            //                var fileSavePAth = System.IO.Path.Combine (  rootPath,dto.Name + dto.FileExt );
+            //                file.SaveAs ( fileSavePAth );
+            //            }
+            //        }
+            //    }
+            //    catch(Exception exp)
+            //    { }
+            //}
         }
 ///////////////////////////////////////////////////////////////////////////////
          [HttpPost]
