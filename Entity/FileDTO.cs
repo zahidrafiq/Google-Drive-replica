@@ -8,6 +8,7 @@ namespace Entity
 {
     public class FileDTO
     {
+        public int id { get; set; }
         public String Name { get; set; }
         public int ParentFolderId { get; set;}
         public String FileExt { get; set; }

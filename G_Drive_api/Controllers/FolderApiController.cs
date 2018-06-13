@@ -24,24 +24,44 @@ namespace G_Drive_api.Controllers
             var rv=BAL.FolderBO.save ( name,Convert.ToInt32(uid) ,Convert.ToInt32(pfid));
             return rv;
         }
-        
+
 
         [HttpPost]
         public void saveFile () {
+            String uniqueName;
+            FileDTO dto = new FileDTO ();
+            var id=HttpContext.Current.Request.Params.Get ( "uid" );
+            var pid=HttpContext.Current.Request.Params.Get ( "pid" );
             if (HttpContext.Current.Request.Files.AllKeys.Any ())
             {
                 // Get the uploaded image from the Files collection
-                var httpPostedFile = HttpContext.Current.Request.Files["f"];
+                var httpPostedFile = HttpContext.Current.Request.Files["file"];
 
                 if (httpPostedFile != null)
                 {
-                    // Validate the uploaded image(optional)
+                    var ext = System.IO.Path.GetExtension ( httpPostedFile.FileName );
 
-                    // Get the complete file path
-                    var fileSavePath = Path.Combine ( HttpContext.Current.Server.MapPath( "~/UploadedFiles" ), httpPostedFile.FileName );
+                    //Generate a unique name using Guid
+                    uniqueName = Guid.NewGuid ().ToString () + ext;
+
+                    //Get physical path of our folder where we want to save images
+                    var rootPath = HttpContext.Current.Server.MapPath ( "~/UploadedFiles" );
+
+                    var fileSavePath = System.IO.Path.Combine ( rootPath, uniqueName );
 
                     // Save the uploaded file to "UploadedFiles" folder
                     httpPostedFile.SaveAs ( fileSavePath );
+                    dto.Name = uniqueName;
+                    dto.ParentFolderId = Convert.ToInt32( pid );
+                    dto.CreatedBy = Convert.ToInt32( id );
+                    dto.FileExt = ext;
+                    //var fileInfo = new FileInfo ( fileSavePath );
+                    dto.UploadedOn = DateTime.Now;
+                    FileInfo f = new FileInfo ( fileSavePath );
+                    long s1 = f.Length;
+                   // dto.size = Convert.ToInt32(fileInfo.Length);
+                    dto.IsActive = 1;
+                    int rv = BAL.FileBO.SaveFile ( dto );
                 }
             }
             //var a=HttpContext.Current.Request.Params.Get ( "f" );
@@ -77,6 +97,12 @@ namespace G_Drive_api.Controllers
         {
             var a=HttpContext.Current.Request.Params.Get("id");
             return BAL.FolderBO.getChildFolders (Convert.ToInt32( a ));
+        }
+
+        public List<FileDTO> getFiles ()
+        {
+            var fId = HttpContext.Current.Request.Params.Get ( "id" );
+            return BAL.FileBO.getFiles ( Convert.ToInt32 ( fId ) );
         }
 
         //// GET api/<controller>
