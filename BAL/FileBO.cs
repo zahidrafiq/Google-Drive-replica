@@ -14,9 +14,19 @@ namespace BAL
             return DAL.FileDAO.SaveFile ( dto );
         }
 
-        public static List<FileDTO> getFiles ( int pid )
+        public static List<FileDTO> getFiles ( int pid , int uid)
         {
-            return DAL.FileDAO.getFiles ( pid );
+            return DAL.FileDAO.getFiles ( pid ,uid);
+        }
+
+        public static FileDTO getFileByUniqID ( String uniqName )
+        {
+            return DAL.FileDAO.getFileByUniqID ( uniqName );
+        }
+
+        public static FileDTO getFileByUniqIDAndUid ( int fid, int uid )
+        {
+            return DAL.FileDAO.getFileByUniqIDAndUid ( fid, uid );
         }
     }
 }

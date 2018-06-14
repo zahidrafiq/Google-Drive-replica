@@ -19,9 +19,9 @@ namespace BAL
             return DAL.FolderDAO.getFoldersOfUser ( uid );
         }
 
-        public static List<FolderDTO> getChildFolders ( int pid )
+        public static List<FolderDTO> getChildFolders ( int pid ,int uid)
         {
-            return DAL.FolderDAO.getChildFolders ( pid );
+            return DAL.FolderDAO.getChildFolders ( pid ,uid);
         }
 
         public static int delete(int id)

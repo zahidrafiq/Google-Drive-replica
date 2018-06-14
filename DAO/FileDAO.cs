@@ -11,7 +11,7 @@ namespace DAL
     public static class FileDAO
     {
         public static int SaveFile (FileDTO dto) {
-            String query = String.Format( @"INSERT INTO dbo.Files (Name,ParentFolderId,FileExt,FileSizeInKB,CreatedBy,UploadedOn,IsActive) VALUES('{0}','{1}','{2}','{3}','{4}','{5}','{6}');select @@IDENTITY",dto.Name,dto.ParentFolderId,dto.FileExt,dto.size,dto.CreatedBy,dto.UploadedOn,dto.IsActive);
+            String query = String.Format( @"INSERT INTO dbo.Files (Name,ParentFolderId,FileExt,FileSizeInKB,CreatedBy,UploadedOn,IsActive,UniqName) VALUES('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}');select @@IDENTITY",dto.Name,dto.ParentFolderId,dto.FileExt,dto.size,dto.CreatedBy,dto.UploadedOn,dto.IsActive,dto.UniqName);
             using (DBHelper helper = new DBHelper())
             {
                 var rv = helper.ExecuteScalar ( query );
@@ -37,9 +37,9 @@ namespace DAL
             }
         }
         /////////////////////////////////////////////////////////////////////
-        public static List<FileDTO> getFiles ( int pid )
+        public static List<FileDTO> getFiles ( int pid ,int uid)
         {
-            String query = String.Format ( @"SELECT * FROM dbo.Files WHERE ParentFolderId='{0}'", pid  );
+            String query = String.Format ( @"SELECT * FROM dbo.Files WHERE ParentFolderId='{0}' AND CreatedBy='{1}'", pid, uid  );
             using (DBHelper helper = new DBHelper ())
             {
                 var reader = helper.ExecuteReader ( query );
@@ -53,12 +53,35 @@ namespace DAL
                 return list;
             }
         }
-
         /////////////////////////////////////////////////////////////////////
+        public static FileDTO getFileByUniqID (String uniqName)
+        {
+            SqlDataReader reader = null;
+            String query=String.Format(@"SELECT * FROM dbo.Files WHERE UniqName='{0}'",uniqName);
+            using (DBHelper helper = new DBHelper ())
+            {
+                reader=helper.ExecuteReader ( query );
+                FileDTO dto = FillDTO ( reader );
+                return dto;
+            }
+        }
+        /////////////////////////////////////////////////////////////////////
+        public static FileDTO getFileByUniqIDAndUid (int fid , int uid )
+        {
+            SqlDataReader reader = null;
+            String query = String.Format ( @"SELECT * FROM dbo.Files WHERE Id='{0}' AND CreatedBy ='{1}'", fid ,uid);
+            using (DBHelper helper = new DBHelper ())
+            {
+                reader = helper.ExecuteReader ( query );
+                FileDTO dto = FillDTO ( reader );
+                return dto;
+            }
+        }
+        //////////////////////////////////////////////////////////////////////
         private static FileDTO FillDTO ( SqlDataReader reader )
         {
             var dto = new FileDTO ();
-            dto.id = reader.GetInt32 ( reader.GetOrdinal ( "id" ) );
+            //dto.id = reader.GetInt32 ( reader.GetOrdinal ( "Id" ) );
             dto.Name = reader.GetString ( reader.GetOrdinal ( "Name" ) );
             dto.ParentFolderId = reader.GetInt32 ( reader.GetOrdinal ( "ParentFolderId" ) );
             //dto.IsActive = reader.GetByte ( reader.GetOrdinal ( "IsActive" ) );
@@ -66,6 +89,9 @@ namespace DAL
             dto.UploadedOn = reader.GetDateTime ( reader.GetOrdinal ( "UploadedOn" ) );
             dto.FileExt = reader.GetString ( reader.GetOrdinal ( "FileExt" ) );
             dto.size = reader.GetInt32 ( reader.GetOrdinal ( "FileSizeInKB" ) );
+            try {
+                dto.UniqName = reader.GetString ( reader.GetOrdinal ( "UniqName" ) );
+            } catch (Exception exp) { }
             return dto;
         }
 

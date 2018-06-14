@@ -39,9 +39,9 @@ namespace DAL
             }
         }
         /////////////////////////////////////////////////////////////////////
-        public static List<FolderDTO> getChildFolders(int pid)
+        public static List<FolderDTO> getChildFolders(int pid ,int uid)
         {
-            String query = String.Format(@"SELECT * FROM dbo.Folder WHERE ParentFolderId='{0}'", pid);
+            String query = String.Format(@"SELECT * FROM dbo.Folder WHERE ParentFolderId='{0}' AND CreatedBy='{1}'", pid,uid);
             using (DBHelper helper = new DBHelper ())
             { 
                 var reader=helper.ExecuteReader ( query );

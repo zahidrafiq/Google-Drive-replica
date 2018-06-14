@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Net.Http.Headers;
 //using System.Windows.Shell;
 namespace G_Drive_api.Controllers
 {
@@ -41,7 +42,7 @@ namespace G_Drive_api.Controllers
             {
                 // Get the uploaded image from the Files collection
                 var httpPostedFile = HttpContext.Current.Request.Files["file"];
-
+                dto.Name=httpPostedFile.FileName;
                 if (httpPostedFile != null)
                 {
                     var ext = System.IO.Path.GetExtension ( httpPostedFile.FileName );
@@ -56,7 +57,7 @@ namespace G_Drive_api.Controllers
 
                     // Save the uploaded file to "UploadedFiles" folder
                     httpPostedFile.SaveAs ( fileSavePath );
-                    dto.Name = uniqueName;
+                    dto.UniqName = uniqueName;
                     dto.ParentFolderId = Convert.ToInt32( pid );
                     dto.CreatedBy = Convert.ToInt32( id );
                     dto.FileExt = ext;
@@ -64,52 +65,64 @@ namespace G_Drive_api.Controllers
                     dto.UploadedOn = DateTime.Now;
                     FileInfo f = new FileInfo ( fileSavePath );
                     long s1 = f.Length;
-                   // dto.size = Convert.ToInt32(fileInfo.Length);
+                    
+
+                    // dto.size = Convert.ToInt32(fileInfo.Length);
                     dto.IsActive = 1;
                     int rv = BAL.FileBO.SaveFile ( dto );
                 }
             }
-            //var a=HttpContext.Current.Request.Params.Get ( "f" );
-            //if(HttpContext.Current.Request.Files.Count > 0)
-            //{
-            //    try
-            //    {
-            //        foreach (var fileName in HttpContext.Current.Request.Files.AllKeys)
-            //        {
-            //            HttpPostedFile file = HttpContext.Current.Request.Files[fileName];
-            //            if (file != null)
-            //            {
-            //                FileDTO dto = new FileDTO ();
-            //                dto.Name = Guid.NewGuid ().ToString ();//Unique file name.
-            //                dto.UploadedOn = DateTime.Now;
-            //                //dto.CreatedBy = Uid;
-            //                dto.FileExt = Path.GetExtension ( file.FileName );
-            //                //dto.ParentFolderId = ParentId;
-            //                dto.size = 1024;
-            //                var rootPath = HttpContext.Current.Server.MapPath ( "~/UploadedFiles" );
-            //                var fileSavePAth = System.IO.Path.Combine (  rootPath,dto.Name + dto.FileExt );
-            //                file.SaveAs ( fileSavePAth );
-            //            }
-            //        }
-            //    }
-            //    catch(Exception exp)
-            //    { }
-            //}
+        }
+///////////////////////////////////////////////////////////////////////////////
+        public Object downLoadFile(String uniqName)
+        {
+            String rootPath = HttpContext.Current.Server.MapPath ( "~/UploadedFiles" );
+            var fileDTO = BAL.FileBO.getFileByUniqID ( uniqName );
+
+            if(fileDTO!=null)
+            {
+                HttpResponseMessage response = new HttpResponseMessage ( HttpStatusCode.OK );
+                var fileFullPath = System.IO.Path.Combine ( rootPath, fileDTO.UniqName + fileDTO.FileExt );
+
+                byte[] file = System.IO.File.ReadAllBytes ( fileFullPath );
+                System.IO.MemoryStream ms = new System.IO.MemoryStream ( file );
+
+                response.Content = new ByteArrayContent ( file );
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue ("attachment");
+                //String mimeType = MimeType.
+
+                //response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue ( fileDTO.ContentType );
+                response.Content.Headers.ContentDisposition.FileName = fileDTO.Name;
+                return response;
+            }
+            else
+            {
+                HttpResponseMessage response = new HttpResponseMessage (HttpStatusCode.NotFound);
+                return response;
+            }
         }
 ///////////////////////////////////////////////////////////////////////////////
          [HttpPost]
          public List<FolderDTO> getChildFolders()
         {
-            var a=HttpContext.Current.Request.Params.Get("id");
-            return BAL.FolderBO.getChildFolders (Convert.ToInt32( a ));
+            var pId=HttpContext.Current.Request.Params.Get("pid");
+            var uId = HttpContext.Current.Request.Params.Get ("uid");
+            return BAL.FolderBO.getChildFolders (Convert.ToInt32( pId ),Convert.ToInt32(uId));
         }
-
+        [HttpPost]
         public List<FileDTO> getFiles ()
         {
-            var fId = HttpContext.Current.Request.Params.Get ( "id" );
-            return BAL.FileBO.getFiles ( Convert.ToInt32 ( fId ) );
+            var fId = HttpContext.Current.Request.Params.Get ( "fid" );
+            var uid = HttpContext.Current.Request.Params.Get ( "uid" );
+            return BAL.FileBO.getFiles ( Convert.ToInt32 ( fId ) , Convert.ToInt32(uid));
         }
-
+        [HttpPost]
+        public FileDTO getFileByUniqIDAndUid()
+        {
+            var fId = HttpContext.Current.Request.Params.Get ( "fid" );
+            var uid = HttpContext.Current.Request.Params.Get ( "uid" );
+            return BAL.FileBO.getFileByUniqIDAndUid (Convert.ToInt32( fId ), Convert.ToInt32(uid) );
+        }
         //// GET api/<controller>
         //public IEnumerable<string> Get ()
         //{
