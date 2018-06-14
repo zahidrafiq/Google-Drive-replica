@@ -23,5 +23,10 @@ namespace BAL
         {
             return DAL.FolderDAO.getChildFolders ( pid );
         }
+
+        public static int delete(int id)
+        {
+            return DAL.FolderDAO.delete(id);
+        }
     }
 }

@@ -25,7 +25,12 @@ namespace G_Drive_api.Controllers
             return rv;
         }
 
-
+        [HttpPost]
+        public int delete()
+        {
+            var id = HttpContext.Current.Request.Params.Get ( "ID" );
+            return BAL.FolderBO.delete ( Convert.ToInt32( id ));
+        }
         [HttpPost]
         public void saveFile () {
             String uniqueName;

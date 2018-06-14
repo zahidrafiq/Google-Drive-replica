@@ -68,5 +68,14 @@ namespace DAL
             return dto;
         }
 
+        public static int delete(int id)
+        {
+            String query=String.Format(@"DELETE FROM dbo.Folder WHERE id='{0}'",id);
+            using (DBHelper helper = new DBHelper())
+            {
+                int rv=helper.ExecuteQuery(query);
+                return rv;
+            }
+        }
     }
 }
