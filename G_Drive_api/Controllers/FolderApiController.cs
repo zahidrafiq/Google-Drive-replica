@@ -139,5 +139,33 @@ namespace G_Drive_api.Controllers
             return BAL.FileBO.getFileById (Convert.ToInt32( fId ) );
         }
         
+        [HttpPost]
+        public void generateFolderMeta(int currPos,int uid)
+        {
+
+            List<FolderDTO> subList = BAL.FolderBO.getChildFolders ( currPos ,uid);
+            List<FolderDTO> temp = new List<FolderDTO> ();
+            temp.AddRange ( subList );
+            List<FolderDTO> ResultantList = new List<FolderDTO> ();
+            ResultantList.AddRange ( subList );
+            FolderDTO fldr = new FolderDTO ();
+            int j = 0;
+            for (int i=0;i<=(temp.Count-j);i++)
+            {
+                fldr = temp[i];
+                subList = new List<FolderDTO> ();
+                subList = getChildren ( fldr.id, uid );
+                if (subList.Count > 0)
+                    j++;
+                ResultantList.AddRange ( subList );
+                temp.AddRange ( subList );
+            }
+        }
+
+        private List<FolderDTO> getChildren (int pId,int uId)
+        {
+            return BAL.FolderBO.getChildFolders (  pId ,uId  );
+        }
+
     }
 }
