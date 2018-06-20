@@ -33,8 +33,10 @@ namespace G_Drive_api.Controllers
             return BAL.FolderBO.delete ( Convert.ToInt32( id ));
         }
         [HttpPost]
-        public void saveFile () {
+        public Object saveFile ()
+        {
             String uniqueName;
+            Object data = null;
             FileDTO dto = new FileDTO ();
             var id=HttpContext.Current.Request.Params.Get ( "uid" );
             var pid=HttpContext.Current.Request.Params.Get ( "pid" );
@@ -42,13 +44,13 @@ namespace G_Drive_api.Controllers
             {
                 // Get the uploaded image from the Files collection
                 var httpPostedFile = HttpContext.Current.Request.Files["file"];
-                dto.Name=httpPostedFile.FileName;
-                if (httpPostedFile != null)
+                 if (httpPostedFile != null)
                 {
                     var ext = System.IO.Path.GetExtension ( httpPostedFile.FileName );
-
+                    dto.Name = httpPostedFile.FileName.Substring ( 0, httpPostedFile.FileName.Length - ext.Length );
+                    
                     //Generate a unique name using Guid
-                    uniqueName = Guid.NewGuid ().ToString () + ext;
+                    uniqueName = Guid.NewGuid ().ToString ();
 
                     //Get physical path of our folder where we want to save images
                     var rootPath = HttpContext.Current.Server.MapPath ( "~/UploadedFiles" );
@@ -70,29 +72,43 @@ namespace G_Drive_api.Controllers
                     // dto.size = Convert.ToInt32(fileInfo.Length);
                     dto.IsActive = 1;
                     int rv = BAL.FileBO.SaveFile ( dto );
+                        if (rv > 0) {
+                            data = new
+                            { ID = rv,   NAME = dto.Name};
+                        }
+                        else
+                        {
+                            data = new
+                            { ID = -1, NAME = "" };
+                        }       
                 }
+                
             }
+            return data;
         }
-///////////////////////////////////////////////////////////////////////////////
-        public Object downLoadFile(String uniqName)
+        ///////////////////////////////////////////////////////////////////////////////
+        [HttpGet]
+        public Object downLoadFile(int fileId)
         {
+            //int fileId =Convert.ToInt32( HttpContext.Current.Request.Params.Get ( "fId" ));
+            FileDTO fileDTO=BAL.FileBO.getFileById( fileId );
             String rootPath = HttpContext.Current.Server.MapPath ( "~/UploadedFiles" );
-            var fileDTO = BAL.FileBO.getFileByUniqID ( uniqName );
-
+           
             if(fileDTO!=null)
             {
                 HttpResponseMessage response = new HttpResponseMessage ( HttpStatusCode.OK );
-                var fileFullPath = System.IO.Path.Combine ( rootPath, fileDTO.UniqName + fileDTO.FileExt );
+                var fileFullPath = System.IO.Path.Combine ( rootPath, fileDTO.UniqName );
 
                 byte[] file = System.IO.File.ReadAllBytes ( fileFullPath );
                 System.IO.MemoryStream ms = new System.IO.MemoryStream ( file );
 
                 response.Content = new ByteArrayContent ( file );
                 response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue ("attachment");
-                //String mimeType = MimeType.
+               
+                // String mimeType = 
 
-                //response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue ( fileDTO.ContentType );
-                response.Content.Headers.ContentDisposition.FileName = fileDTO.Name;
+                //response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue ( fileDTO.FileExt );
+                response.Content.Headers.ContentDisposition.FileName = fileDTO.Name+fileDTO.FileExt;
                 return response;
             }
             else
@@ -120,34 +136,8 @@ namespace G_Drive_api.Controllers
         public FileDTO getFileByUniqIDAndUid()
         {
             var fId = HttpContext.Current.Request.Params.Get ( "fid" );
-            var uid = HttpContext.Current.Request.Params.Get ( "uid" );
-            return BAL.FileBO.getFileByUniqIDAndUid (Convert.ToInt32( fId ), Convert.ToInt32(uid) );
+            return BAL.FileBO.getFileById (Convert.ToInt32( fId ) );
         }
-        //// GET api/<controller>
-        //public IEnumerable<string> Get ()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        //// GET api/<controller>/5
-        //public string Get ( int id )
-        //{
-        //    return "value";
-        //}
-
-        //// POST api/<controller>
-        //public void Post ( [FromBody]string value )
-        //{
-        //}
-
-        //// PUT api/<controller>/5
-        //public void Put ( int id, [FromBody]string value )
-        //{
-        //}
-
-        //// DELETE api/<controller>/5
-        //public void Delete ( int id )
-        //{
-        //}
+        
     }
 }

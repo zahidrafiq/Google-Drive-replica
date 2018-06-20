@@ -35,8 +35,11 @@
 //////////////////////////////////////////////////////////////////
         $("#btnBack").click(function(){
                 debugger;
+                var UID=localStorage.getItem("USERID")
                 var parentPos=stack.pop();
-                getInnerFolder(parentPos);$("#btnDel").hide();
+                getInnerFolder(parentPos);           getFiles(parentPos,UID);
+                $("#btnDel").hide();
+                $("#btnDownLoad").hide();
                 $("div.Select").css("border","none");
          });// $("#btnBack").click()
         $("#btnDownLoad").click(function(){var fileId=$("div.Select").attr('id');dowloadFile(fileId);});
@@ -59,24 +62,10 @@
 /////////////////////////////////////////////////////////////////
         function dowloadFile(fId)
         {
-            var uId=localStorage.getItem("USERID");
-            alert("UID : "+ uId +"  FID : "+fId);
-            var d={"fid":fId , "uid":uId};
-             var settings={type:"POST",dataType:"json",url:basePath+'api/FolderApi/getFileByUniqIDAndUid',data:d,
-                success(resp){
-                        if(resp){console.log(resp);
-                                 //$("div.Select").remove();
-                                 //$("#btnDel").hide();
-                                //alert("Deleted Successfully");
-        alert(resp.Name);
-                        }
-                        else alert("ERROR! in ");
-                },//end of success()
-                        error(){alert("There is some error in Getting FileDTO");}
-        };//end of settings
-            $.ajax(settings);
-
-            //var url=basePath+'api/FolderApi/downLoadFile?uniqName=
+            $("div.Select").css("border","none");
+            $("#btnDel").hide();$("#btnDownLoad").hide();
+            var url=basePath+'api/FolderApi/downLoadFile?fileId='+fId;
+            window.open(url);
         }
 
 
@@ -91,7 +80,8 @@
                         if(resp==1){console.log(resp);
                                  $("div.Select").remove();
                                  $("#btnDel").hide();
-                                alert("Deleted Successfully");
+                                 $("#btnDownLoad").hide();
+                                 alert("Deleted Successfully");
 
                         }
                         else alert("ERROR! in deletion");
@@ -136,7 +126,7 @@
                         }
                             //alert("Del ID: "+ID);
                     }
-                }, 1000);//end of Timeout Function.
+                }, 700);//end of Timeout Function.
             }
         }//end of ClickEventHandler();
 
@@ -217,7 +207,15 @@ return false;
                 d.append("pid",ParentId);
            // Make Ajax request with the contentType = false, and procesDate = false
             var settings ={ type: "POST", url: basePath+'api/FolderApi/saveFile',contentType: false,
-            processData: false,  data: d };
+            processData: false,  data: d ,
+        success:function(res){console.log(res);
+            var div=$("<div>").attr("id",res.ID).addClass("folder").addClass("innerFClass").text(res.NAME).bind( "click", function(){return ClickEventHandler(this,"file");//getInnerFolder(ID)
+                                });
+                        $("#displayFileList").append(div);
+
+        }//end of success function
+        };//end of settings.
+
             $.ajax(settings);
             return false;
          }
@@ -231,12 +229,12 @@ return false;
             var settings={type:"POST",dataType:"json",url:basePath+'api/FolderApi/getFiles',data:d,
                 success:function(res){
                     console.log(res);
-                    $("#displayFList").empty();
+                    $("#displayFileList").empty();
                     for(var i=0;i<res.length;i++)
                     {
-                        var div=$("<div>").attr("id",res[i].id).addClass("folder").addClass("innerFClass").text(res[i].name).bind( "click", function(){var ID = $(this).attr('id'); alert( ID );stack.push(ID);ClickEventHandler(this,"file");//getInnerFolder(ID)
+                        var div=$("<div>").attr("id",res[i].id).addClass("folder").addClass("innerFClass").text(res[i].Name).bind( "click", function(){return ClickEventHandler(this,"file");//getInnerFolder(ID)
                                 });
-                        $("#displayFList").append(div);
+                        $("#displayFileList").append(div);
                     }
                 }
             ,error:function(){alert("NO");}
@@ -268,6 +266,7 @@ return false;
          }
      }
 </div>
+<div id="displayFileList">    
     @{ 
     <h1>Files</h1>
     foreach (var item in Model.Files)
@@ -275,6 +274,7 @@ return false;
        <div id="@item.id" style="display:inline-block;border-radius:5px; width:100px;height:50px;background-color:sandybrown;margin:15px;text-align:center;" ondblclick='return ClickEventHandler(this,"file");'><span>@item.Name</span></div>
     }
 }
+    </div>
 
 
 

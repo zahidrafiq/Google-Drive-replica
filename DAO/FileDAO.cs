@@ -43,10 +43,10 @@ namespace DAL
             using (DBHelper helper = new DBHelper ())
             {
                 var reader = helper.ExecuteReader ( query );
-                List<FileDTO> list = new List<FileDTO> ();
+                List<FileDTO> list = new List<FileDTO>();
                 while (reader.Read ())
                 {
-                    var dto = FillDTO ( reader );
+                    var dto = FillDTO(reader);
                     if (dto != null)
                         list.Add ( dto );
                 }
@@ -61,18 +61,20 @@ namespace DAL
             using (DBHelper helper = new DBHelper ())
             {
                 reader=helper.ExecuteReader ( query );
+                reader.Read ();
                 FileDTO dto = FillDTO ( reader );
                 return dto;
             }
         }
         /////////////////////////////////////////////////////////////////////
-        public static FileDTO getFileByUniqIDAndUid (int fid , int uid )
+        public static FileDTO getFileById (int fid)
         {
             SqlDataReader reader = null;
-            String query = String.Format ( @"SELECT * FROM dbo.Files WHERE Id='{0}' AND CreatedBy ='{1}'", fid ,uid);
+            String query = String.Format ( @"SELECT * FROM dbo.Files WHERE Id='{0}'", fid);
             using (DBHelper helper = new DBHelper ())
             {
                 reader = helper.ExecuteReader ( query );
+                reader.Read ();
                 FileDTO dto = FillDTO ( reader );
                 return dto;
             }
@@ -80,11 +82,11 @@ namespace DAL
         //////////////////////////////////////////////////////////////////////
         private static FileDTO FillDTO ( SqlDataReader reader )
         {
-            var dto = new FileDTO ();
-            //dto.id = reader.GetInt32 ( reader.GetOrdinal ( "Id" ) );
+            var dto = new FileDTO();
+            dto.id = reader.GetInt32( 0 );
             dto.Name = reader.GetString ( reader.GetOrdinal ( "Name" ) );
             dto.ParentFolderId = reader.GetInt32 ( reader.GetOrdinal ( "ParentFolderId" ) );
-            //dto.IsActive = reader.GetByte ( reader.GetOrdinal ( "IsActive" ) );
+            dto.IsActive = Convert.ToByte( reader.GetBoolean ( reader.GetOrdinal ( "IsActive" ) ));
             dto.CreatedBy = reader.GetInt32 ( reader.GetOrdinal ( "CreatedBy" ) );
             dto.UploadedOn = reader.GetDateTime ( reader.GetOrdinal ( "UploadedOn" ) );
             dto.FileExt = reader.GetString ( reader.GetOrdinal ( "FileExt" ) );

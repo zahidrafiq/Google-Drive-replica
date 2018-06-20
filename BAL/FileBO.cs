@@ -24,9 +24,9 @@ namespace BAL
             return DAL.FileDAO.getFileByUniqID ( uniqName );
         }
 
-        public static FileDTO getFileByUniqIDAndUid ( int fid, int uid )
+        public static FileDTO getFileById ( int fid )
         {
-            return DAL.FileDAO.getFileByUniqIDAndUid ( fid, uid );
+            return DAL.FileDAO.getFileById ( fid );
         }
     }
 }
