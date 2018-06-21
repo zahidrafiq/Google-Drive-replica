@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="MetaDocs\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -229,6 +230,10 @@
     <ProjectReference Include="..\Entity\Entity.csproj">
       <Project>{48f3a256-9d4b-438c-b77d-7f9afa0e41d7}</Project>
       <Name>Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Dell inspiron\Desktop\pdf_Generation_Prac\PdfHelperClassLibrary\PdfHelperClassLibrary.csproj">
+      <Project>{6486ec95-919d-45a0-989a-2799cb6b41bc}</Project>
+      <Name>PdfHelperClassLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="D:\Smester 6\EAD\Assignment8\Ass8_GoogleDrive\BAL\BAL.csproj">
       <Project>{98d8f46d-2470-45b6-9151-d77d24a499c2}</Project>

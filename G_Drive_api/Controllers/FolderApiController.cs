@@ -90,7 +90,6 @@ namespace G_Drive_api.Controllers
         [HttpGet]
         public Object downLoadFile(int fileId)
         {
-            //int fileId =Convert.ToInt32( HttpContext.Current.Request.Params.Get ( "fId" ));
             FileDTO fileDTO=BAL.FileBO.getFileById( fileId );
             String rootPath = HttpContext.Current.Server.MapPath ( "~/UploadedFiles" );
            
@@ -117,6 +116,32 @@ namespace G_Drive_api.Controllers
                 return response;
             }
         }
+
+        [HttpGet]
+        public Object pdfDownLoader(String fileFullPath)
+        {
+            try
+            {
+                HttpResponseMessage response = new HttpResponseMessage ( HttpStatusCode.OK );
+
+                byte[] file = System.IO.File.ReadAllBytes ( fileFullPath );
+                System.IO.MemoryStream ms = new System.IO.MemoryStream ( file );
+
+                response.Content = new ByteArrayContent ( file );
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue ( "attachment" );
+
+                // String mimeType = 
+
+                //response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue ( fileDTO.FileExt );
+                response.Content.Headers.ContentDisposition.FileName ="MetaData" + DateTime.Now.Ticks.ToString() + ".pdf";
+                return response;
+            }
+            catch(Exception)
+            {
+                HttpResponseMessage response = new HttpResponseMessage ( HttpStatusCode.NotFound );
+                return response;
+            }
+        }
 ///////////////////////////////////////////////////////////////////////////////
          [HttpPost]
          public List<FolderDTO> getChildFolders()
@@ -140,14 +165,20 @@ namespace G_Drive_api.Controllers
         }
         
         [HttpPost]
-        public void generateFolderMeta(int currPos,int uid)
+        public Object generateFolderMeta(int currPos,int uid)
         {
-
-            List<FolderDTO> subList = BAL.FolderBO.getChildFolders ( currPos ,uid);
+            List<FolderDTO> subList = new List<FolderDTO> ();
+         //   subList.Add ( parentFolder );
+            subList.AddRange ( BAL.FolderBO.getChildFolders ( currPos, uid ) );
             List<FolderDTO> temp = new List<FolderDTO> ();
+            List<FolderDTO> finalFolderList = new List<FolderDTO> ();
+            List<FileDTO> finalFileList = new List<FileDTO> ();
+            FileFolderDTO fileFolderObj = new FileFolderDTO ();
+            List<FileDTO> tmpFileList = BAL.FileBO.getFiles(currPos,uid);
+            finalFileList.AddRange ( tmpFileList );
             temp.AddRange ( subList );
-            List<FolderDTO> ResultantList = new List<FolderDTO> ();
-            ResultantList.AddRange ( subList );
+            
+            finalFolderList.AddRange ( subList );
             FolderDTO fldr = new FolderDTO ();
             int j = 0;
             for (int i=0;i<=(temp.Count-j);i++)
@@ -157,9 +188,21 @@ namespace G_Drive_api.Controllers
                 subList = getChildren ( fldr.id, uid );
                 if (subList.Count > 0)
                     j++;
-                ResultantList.AddRange ( subList );
+                finalFolderList.AddRange ( subList );
+
+                tmpFileList = new List<FileDTO> ();
+                tmpFileList= BAL.FileBO.getFiles ( fldr.id, uid );
+                finalFileList.AddRange ( tmpFileList );
                 temp.AddRange ( subList );
             }
+            FolderDTO parentFolder = BAL.FolderBO.getFolderById ( currPos );
+            finalFolderList.Insert ( 0, parentFolder );
+           // finalFolderList.Add ( parentFolder );
+            fileFolderObj.Folder = finalFolderList;
+            fileFolderObj.File = finalFileList;
+            String physicalPath = HttpContext.Current.Server.MapPath ( "~/MetaDocs" );
+            String fileCompletePath=PdfHelperClassLibrary.PdfHelper.GeneratePdf ( fileFolderObj, physicalPath );
+            return fileCompletePath;
         }
 
         private List<FolderDTO> getChildren (int pId,int uId)

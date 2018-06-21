@@ -279,6 +279,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="G_Drive_api\UploadedFiles\" />
     <Folder Include="images\" />
+    <Folder Include="MetaDocs\" />
     <Folder Include="UploadedFiles\" />
   </ItemGroup>
   <ItemGroup>

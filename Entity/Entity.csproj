@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileFolderDTO.cs" />
     <Compile Include="UserFileFolderDTO.cs" />
     <Compile Include="FileDTO.cs" />
     <Compile Include="FolderDTO.cs" />

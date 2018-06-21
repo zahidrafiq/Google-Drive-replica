@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity", "D:\Smester 6\EAD\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ass8_GoogleDrive", "Ass8_GoogleDrive\Ass8_GoogleDrive.csproj", "{7378E1F5-DE92-44AF-86FE-FE7C7D52AEF2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfHelperClassLibrary", "C:\Users\Dell inspiron\Desktop\pdf_Generation_Prac\PdfHelperClassLibrary\PdfHelperClassLibrary.csproj", "{6486EC95-919D-45A0-989A-2799CB6B41BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{7378E1F5-DE92-44AF-86FE-FE7C7D52AEF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7378E1F5-DE92-44AF-86FE-FE7C7D52AEF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7378E1F5-DE92-44AF-86FE-FE7C7D52AEF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6486EC95-919D-45A0-989A-2799CB6B41BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6486EC95-919D-45A0-989A-2799CB6B41BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6486EC95-919D-45A0-989A-2799CB6B41BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6486EC95-919D-45A0-989A-2799CB6B41BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
