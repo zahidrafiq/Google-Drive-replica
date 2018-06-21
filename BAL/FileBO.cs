@@ -14,6 +14,11 @@ namespace BAL
             return DAL.FileDAO.SaveFile ( dto );
         }
 
+        public static int delete ( int id )
+        {
+            return DAL.FileDAO.delete ( id );
+        }
+
         public static List<FileDTO> getFiles ( int pid , int uid)
         {
             return DAL.FileDAO.getFiles ( pid ,uid);

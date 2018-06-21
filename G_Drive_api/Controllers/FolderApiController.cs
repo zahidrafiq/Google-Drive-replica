@@ -30,7 +30,11 @@ namespace G_Drive_api.Controllers
         public int delete()
         {
             var id = HttpContext.Current.Request.Params.Get ( "ID" );
-            return BAL.FolderBO.delete ( Convert.ToInt32( id ));
+            var type = HttpContext.Current.Request.Params.Get ( "TYPE" );
+            if (type.Equals ( "folder" ))
+                return BAL.FolderBO.delete ( Convert.ToInt32 ( id ) );
+            else
+                return BAL.FileBO.delete ( Convert.ToInt32 ( id ) );
         }
         [HttpPost]
         public Object saveFile ()
