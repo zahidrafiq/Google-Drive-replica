@@ -106,12 +106,12 @@
             var ID=$this.attr('id');
             if ($this.hasClass('clicked'))
             {
+                //code for double click
                 $this.removeClass('clicked');
-                alert("Double click");
                 $("btnDel").hide();
                 $("div.Select").css("border","none");
                 doubleClick($this);
-                //here is your code for double click
+
             }
             else
             {
@@ -121,9 +121,7 @@
                     if ($this.hasClass('clicked'))
                     {
                         $this.removeClass('clicked');
-                        alert("Just one click!");
                         //code for single click
-                     //   var selectElement=$this.parents("div.outerToFolder");
                         var previousSelected=$("div.Select");
                         $("div.Select").css("border","none");
                         previousSelected.removeClass("Select");
@@ -133,7 +131,6 @@
                         {
                             $("#btnDownLoad").show();
                         }
-                            //alert("Del ID: "+ID);
                     }
                 }, 700);//end of Timeout Function.
             }
@@ -148,7 +145,6 @@
                 preSelect.css("border","none").removeClass("Select");
             var PID = $(ClickedFolder).attr('id');
             var UID=localStorage.getItem("USERID");
-            alert( PID );
            stack.push(PID);
            getInnerFolder(PID);
            getFiles(PID,UID);
@@ -159,14 +155,18 @@
 ////////////////////////////////////////////////////////////////
         function getInnerFolder(PID)
         {debugger;
-           //stack.push(ID);
             var UID = localStorage.getItem("USERID");
             var d={"pid":PID,"uid":UID};
             var settings={type:"POST",dataType:"json",url:basePath+'api/FolderApi/getChildFolders',data:d,
                 success:function(res){
                     console.log(res);
                     $("#displayFList").empty();
-        debugger;
+                  if(res.length>0){
+                     var f=$("h1.FolderLabel").text();
+                     $("h1.FolderLabel").show();
+                     $( f ).insertBefore( "#displayFList" );
+                  }
+                  else{$("h1.FolderLabel").hide();}
                     for(var i=0;i<res.length;i++)
                     {
                         var div=$("<div>").attr("id",res[i].id).addClass("folder").addClass("Fldr").text(res[i].name).bind( "click", function(){return ClickEventHandler(this,"folder");//var ID = $(this).attr('id'); alert( ID );stack.push(ID);//getInnerFolder(ID);
@@ -174,6 +174,7 @@
 
                         $("#displayFList").append(div);
                     }
+        debugger;
                 }
             ,error:function(){alert("NO");}
             };
@@ -217,7 +218,7 @@ return false;
            // Make Ajax request with the contentType = false, and procesDate = false
             var settings ={ type: "POST", url: basePath+'api/FolderApi/saveFile',contentType: false,
             processData: false,  data: d ,
-        success:function(res){console.log(res);
+            success:function(res){console.log(res);
             var div=$("<div>").attr("id",res.ID).addClass("folder").addClass("innerFClass").text(res.NAME).bind( "click", function(){return ClickEventHandler(this,"file");//getInnerFolder(ID)
                                 });
                         $("#displayFileList").append(div);
@@ -233,18 +234,24 @@ return false;
 ///////////////////////////////////////////////////////////////////////////////////
     function getFiles(FolderID,UID)
     {debugger;
-           // stack.push(ID);
             var d={"fid":FolderID,"uid":UID};
-            var settings={type:"POST",dataType:"json",url:basePath+'api/FolderApi/getFiles',data:d,        
+            var settings={type:"POST",dataType:"json",url:basePath+'api/FolderApi/getFiles',data:d,
             success:function(res)
             {
                 $("#displayFileList").empty();
-                for(var i=0;i<res.length;i++)
-                {
+                if(res.length>0){
+                    var f=$("h1.FileLabel").text();
+                    $("h1.FileLabel").show();
+                    $( f ).insertBefore( "#displayFileList" );
+                }
+                else{$("h1.FileLabel").hide();}
+                //To Show Label of Files
+                 for(var i=0;i<res.length;i++)
+                 {
                     var div=$("<div>").attr("id",res[i].id).addClass("folder").text(res[i].Name);
                     $(div).bind( "click", function(){return ClickEventHandler(this,"file"); });
                     $("#displayFileList").append(div);
-                }
+                 }
             }
             ,error:function(){alert("NO");}
        };//end of settings.
@@ -267,27 +274,31 @@ return false;
 <input id="file-upload" type="file" style="display:none;" onchange="isFileSelected();"/>
 <input type="button" class="btn" id="btnDel" value="Delete" style="background-color:red;display:none;" />
 <input type="button" class="btn" id="btnDownLoad" value="Download File" style="display:none;" />
-
+<h1 class="FolderLabel" style="display:none;">Folders</h1>
 <div id="displayFList">
     @{
-        <h1>Folders</h1>
-foreach (var item in Model.Folders)
-{
-  <div class="Fldr" id="@item.id" style="margin:0px; display:inline-block;border-radius:5px; width:100px;height:50px;
-    background-color:sandybrown;margin:15px;text-align:center;" onclick='return ClickEventHandler(this,"Folder");'>
-    <span>@item.name</span></div>
-}
+        if (Model.Folders.Count > 0)
+        {<h1>Folders</h1>}
+        foreach (var item in Model.Folders)
+        {
+          <div class="Fldr" id="@item.id" style="margin:0px; display:inline-block;border-radius:5px; width:100px;height:50px;
+            background-color:sandybrown;margin:15px;text-align:center;" onclick='return ClickEventHandler(this,"Folder");'>
+            <span>@item.name</span></div>
+        }
 
 
 }
 </div>
+<h1 class="FileLabel" style="display:none;">Files</h1>
+
 <div id="displayFileList">    
     @{ 
-    <h1>Files</h1>
-    foreach (var item in Model.Files)
-    {
-       <div id="@item.id" style="display:inline-block;border-radius:5px; width:100px;height:50px;background-color:sandybrown;margin:15px;text-align:center;" ondblclick='return ClickEventHandler(this,"file");'><span>@item.Name</span></div>
-    }
+        if (Model.Files.Count > 0)
+        { <h1>Files</h1>}
+        foreach (var item in Model.Files)
+        {
+           <div id="@item.id" style="display:inline-block;border-radius:5px; width:100px;height:50px;background-color:sandybrown;margin:15px;text-align:center;" ondblclick='return ClickEventHandler(this,"file");'><span>@item.Name</span></div>
+        }
 }
     </div>
 
@@ -306,30 +317,3 @@ foreach (var item in Model.Folders)
 <div id="delOPtion" style="height:50px;width:100px;border:1px solid black;display:none;z-index:109;background-color:Highlight">Delete</div>
 <div id="coverFolder" style="height:50px;width:100px;background-color:lightblue;z-index:103;display:none;"></div>
 
-
-
-
-
-        function ClickEventHandler(clickedElement)
-        {
-            var $this = $(clickedElement);
-            var ID=$this.attr('id');
-            if ($this.hasClass('clicked'))
-            {
-                $this.removeClass('clicked');
-                //here is your code for double click
-            }
-            else
-            {
-                $this.addClass('clicked');
-                setTimeout(function()
-                {
-                    if ($this.hasClass('clicked'))
-                    {
-                        $this.removeClass('clicked');
-                        alert("Just one click!");
-                        //code for single click
-                    }
-                }, 700);//end of Timeout Function.
-            }
-        }

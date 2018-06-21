@@ -181,7 +181,7 @@ namespace G_Drive_api.Controllers
             finalFolderList.AddRange ( subList );
             FolderDTO fldr = new FolderDTO ();
             int j = 0;
-            for (int i=0;i<=(temp.Count-j);i++)
+            for (int i=0;i<(temp.Count-j);i++)
             {
                 fldr = temp[i];
                 subList = new List<FolderDTO> ();
@@ -195,6 +195,7 @@ namespace G_Drive_api.Controllers
                 finalFileList.AddRange ( tmpFileList );
                 temp.AddRange ( subList );
             }
+            
             FolderDTO parentFolder = BAL.FolderBO.getFolderById ( currPos );
             finalFolderList.Insert ( 0, parentFolder );
            // finalFolderList.Add ( parentFolder );

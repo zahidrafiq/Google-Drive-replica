@@ -17,6 +17,8 @@ namespace Ass8_GoogleDrive.Controllers
 
         public ActionResult UserHome ()
         {
+            if (!Security.SessionManager.IsValidUser)
+                return View ( "Index" );
             int uid = Security.SessionManager.User.id;
             var ListOfFolder = BAL.FolderBO.getFoldersOfUser (uid);
             var ListOfFiles = BAL.FileBO.getFiles ( 0 ,uid);

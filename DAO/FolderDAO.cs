@@ -41,6 +41,9 @@ namespace DAL
         /////////////////////////////////////////////////////////////////////
         public static FolderDTO getFolderById(int pid)
         {
+            if(pid==0)
+                return new FolderDTO { name = "Root", CreatedBy = 0, CreatedOn = DateTime.Now, id = 0, IsActive = 1, ParentId = 0 };
+            
             String query = String.Format ( @"SELECT * FROM dbo.Folder WHERE Id='{0}'", pid );
             using (DBHelper helper = new DBHelper ())
             {
